@@ -4,6 +4,9 @@
 function handleInfiniteScroll() {
     /*jshint validthis:true */
     var inf = $(this);
+    if (this == document) {
+        inf = $('body');
+    }
     var scrollTop = inf[0].scrollTop;
     var scrollHeight = inf[0].scrollHeight;
     var height = inf[0].offsetHeight;
@@ -24,15 +27,12 @@ function handleInfiniteScroll() {
     else {
         if (scrollTop + height >= scrollHeight - distance) {
             if (virtualListContainer.length > 0) {
-                virtualList = virtualListContainer.eq(-1)[0].f7VirtualList;
-                if (virtualList && !virtualList.reachEnd && !virtualList.params.updatableScroll) {
-                    return;
-                }
+                virtualList = virtualListContainer[0].f7VirtualList;
+                if (virtualList && !virtualList.reachEnd) return;
             }
             inf.trigger('infinite');
         }
     }
-
 }
 app.attachInfiniteScroll = function (infiniteContent) {
     $(infiniteContent).on('scroll', handleInfiniteScroll);
@@ -44,11 +44,18 @@ app.detachInfiniteScroll = function (infiniteContent) {
 app.initPageInfiniteScroll = function (pageContainer) {
     pageContainer = $(pageContainer);
     var infiniteContent = pageContainer.find('.infinite-scroll');
+
     if (infiniteContent.length === 0) return;
+
+    var realScroller = infiniteContent[0].getAttribute('data-handler');
+    if (realScroller && realScroller == 'document') {
+        infiniteContent = $(document);
+    }
+
     app.attachInfiniteScroll(infiniteContent);
     function detachEvents() {
         app.detachInfiniteScroll(infiniteContent);
-        pageContainer.off('page:beforeremove', detachEvents);
+        pageContainer.off('pageBeforeRemove', detachEvents);
     }
-    pageContainer.on('page:beforeremove', detachEvents);
+    pageContainer.on('pageBeforeRemove', detachEvents);
 };
