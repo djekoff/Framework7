@@ -109,6 +109,9 @@ app.initImagesLazyLoad = function (pageContainer) {
         pageContainer[method]('lazy', lazyHandler);
         pageContent[method]('lazy', lazyHandler);
         pageContent[method]('scroll', lazyHandler);
+        if (pageContent[0].getAttribute('data-handler') && pageContent[0].getAttribute('data-handler') == 'document') {
+            $(document)[method]('scroll', lazyHandler);
+        }
         $(window)[method]('resize', lazyHandler);
     }
     function detachEvents() {
