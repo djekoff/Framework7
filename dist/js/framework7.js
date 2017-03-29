@@ -177,10 +177,10 @@
     
         // Link to local storage
         app.ls = {}
-        if ("localStorage" in window) {
+        try {
             app.ls = window.localStorage;
-        } else {
-            console.warn('localStorage nod defined!!!');
+        } catch(e) {
+            console.warn('localStorage nod defined!!!', e);
         }
     
         // RTL
