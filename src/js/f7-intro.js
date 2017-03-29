@@ -160,7 +160,12 @@ window.Framework7 = function (params) {
     };
 
     // Link to local storage
-    app.ls = window.localStorage;
+    app.ls = {}
+    if ("localStorage" in window) {
+        app.ls = window.localStorage;
+    } else {
+        console.warn('localStorage nod defined!!!');
+    }
 
     // RTL
     app.rtl = $('body').css('direction') === 'rtl';

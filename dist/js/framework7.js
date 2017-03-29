@@ -4,13 +4,13 @@
  * 
  * http://framework7.io/
  * 
- * Copyright 2016, Vladimir Kharlampidi
+ * Copyright 2017, Vladimir Kharlampidi
  * The iDangero.us
  * http://www.idangero.us/
  * 
  * Licensed under MIT
  * 
- * Released on: December 8, 2016
+ * Released on: March 29, 2017
  */
 (function () {
 
@@ -176,7 +176,12 @@
         };
     
         // Link to local storage
-        app.ls = window.localStorage;
+        app.ls = {}
+        if ("localStorage" in window) {
+            app.ls = window.localStorage;
+        } else {
+            console.warn('localStorage nod defined!!!');
+        }
     
         // RTL
         app.rtl = $('body').css('direction') === 'rtl';
